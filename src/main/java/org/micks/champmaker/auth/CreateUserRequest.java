@@ -1,32 +1,13 @@
 package org.micks.champmaker.auth;
 
-
-import lombok.NonNull;
-
 public class CreateUserRequest {
 
-    private Long id;
-    @NonNull
-    private String user;
+    private String username;
 
-    public CreateUserRequest(Long id, String user) {
-        this.id = id;
-        this.user = user;
+    public CreateUserRequest() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
+    public String getUsername() {
+        return username;
     }
 }
