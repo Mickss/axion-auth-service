@@ -1,8 +1,8 @@
 package org.micks.champmaker.auth;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @GetMapping
-    public String string() {
-        return "Hello World";
-    }
+    @Autowired
+    private AuthService authService;
 
     @PostMapping(value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createUser(@RequestBody CreateUserRequest createUserRequest) {
+        authService.createUser(createUserRequest);
     }
 }
