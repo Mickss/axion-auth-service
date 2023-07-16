@@ -11,10 +11,12 @@ public class AuthService {
     @Autowired
     private PasswordService passwordService;
 
+    @Autowired
+    private UserPersistApi userPersistApi;
+
     public void createUser(CreateUserRequest createUserRequest) {
-        String username = createUserRequest.getUsername();
-        String password = createUserRequest.getPassword();
-        passwordService.encryptPassword(password);
-        log.info("Creating user {}", username);
+        log.info("Creating user {}", createUserRequest.getUsername());
+        String encryptedPassword = passwordService.encryptPassword(createUserRequest.getPassword());
+        userPersistApi.storeUser(createUserRequest.getUsername(), encryptedPassword);
     }
 }
