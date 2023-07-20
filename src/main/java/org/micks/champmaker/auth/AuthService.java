@@ -19,4 +19,8 @@ public class AuthService {
         String encryptedPassword = passwordService.encryptPassword(createUserRequest.getPassword());
         userPersistApi.storeUser(createUserRequest.getUsername(), encryptedPassword);
     }
+
+    public void loginUser(LoginRequest loginRequest) {
+        userPersistApi.readFile();
+    }
 }

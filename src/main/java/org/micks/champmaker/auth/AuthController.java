@@ -16,8 +16,13 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping(value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createUser(@RequestBody CreateUserRequest createUserRequest) {
         authService.createUser(createUserRequest);
+    }
+
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void loginUser(@RequestBody LoginRequest loginRequest) {
+        authService.loginUser(loginRequest);
     }
 }
