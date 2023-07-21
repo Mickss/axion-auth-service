@@ -25,17 +25,20 @@ public class UserFilePersistService implements UserPersistApi {
         }
     }
 
-    public List<String> readFile() {
+    private User convertStr(String userLine) {
+        String[] split = userLine.split("@@@@", 2);
+        return new User(split[0], split[1]);
+    }
+
+    @Override
+    public List<User> readFile() {
         try {
             FileReader fileRead = new FileReader("C:\\Workspace\\champmaker-auth\\registered-users.txt");
             BufferedReader inStream = new BufferedReader(fileRead);
-
-            List<String> users = new ArrayList<>();
+            List<User> users = new ArrayList<>();
             String inString;
-
             while ((inString = inStream.readLine()) != null) {
-                users.add(inString);
-                System.out.println("Users " + inString);
+                users.add(convertStr(inString));
             }
             return users;
         } catch (IOException e) {

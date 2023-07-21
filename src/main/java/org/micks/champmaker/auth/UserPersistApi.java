@@ -5,6 +5,5 @@ import java.util.List;
 public interface UserPersistApi {
 
     void storeUser(String username, String encryptedPassword);
-
-    List<String> readFile();
+    List<User> readFile();
 }
