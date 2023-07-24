@@ -23,17 +23,17 @@ public class AuthService {
         userPersistApi.storeUser(createUserRequest.getUsername(), encryptedPassword);
     }
 
-    public void loginUser(LoginRequest loginRequest) {
-        List<User> users = userPersistApi.readFile();
+    public void loginUser(LoginRequest loginRequest) throws UserLoginFailedException {
+        List<User> users = userPersistApi.getUsers();
         String loginRequestUsername = loginRequest.getUsername();
         String loginRequestPassword = loginRequest.getPassword();
-        Optional<User> first = users.stream()
+        Optional<User> optionalUser = users.stream()
                 .filter(user -> user.getUsername().equals(loginRequestUsername))
                 .findFirst();
-        User foundUser = first.orElseThrow();
+        User user = optionalUser.orElseThrow(() -> new UserLoginFailedException("Incorrect login name " + loginRequestUsername));
         String encryptPassword = passwordService.encryptPassword(loginRequestPassword);
-        if (!foundUser.getEncryptedPassword().equals(encryptPassword)) {
-            throw new RuntimeException("Login failed");
+        if (!user.getEncryptedPassword().equals(encryptPassword)) {
+            throw new UserLoginFailedException("Login failed " + loginRequestUsername);
         }
     }
 }

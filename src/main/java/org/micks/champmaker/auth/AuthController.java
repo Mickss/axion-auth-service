@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void loginUser(@RequestBody LoginRequest loginRequest) {
+    public void loginUser(@RequestBody LoginRequest loginRequest) throws UserLoginFailedException {
         authService.loginUser(loginRequest);
     }
 }
