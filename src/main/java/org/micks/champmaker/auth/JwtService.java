@@ -9,7 +9,7 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    public static final int ONE_HOUR_IN_MILLIS = 3600000;
+    private static final int ONE_HOUR_IN_MILLIS = 3_600_000;
 
     public String generateJwtToken(String username) {
         long now = System.currentTimeMillis();
