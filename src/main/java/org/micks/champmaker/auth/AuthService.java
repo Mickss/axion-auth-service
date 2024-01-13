@@ -17,13 +17,16 @@ public class AuthService {
     @Autowired
     private UserPersistApi userPersistApi;
 
+    @Autowired
+    private JwtService jwtService;
+
     public void createUser(CreateUserRequest createUserRequest) {
         log.info("Creating user {}", createUserRequest.getUsername());
         String encryptedPassword = passwordService.encryptPassword(createUserRequest.getPassword());
         userPersistApi.storeUser(createUserRequest.getUsername(), encryptedPassword);
     }
 
-    public void loginUser(LoginRequest loginRequest) throws UserLoginFailedException {
+    public String loginUser(LoginRequest loginRequest) throws UserLoginFailedException {
         List<User> users = userPersistApi.getUsers();
         String loginRequestUsername = loginRequest.getUsername();
         String loginRequestPassword = loginRequest.getPassword();
@@ -35,5 +38,6 @@ public class AuthService {
         if (!user.getEncryptedPassword().equals(encryptPassword)) {
             throw new UserLoginFailedException("Login failed " + loginRequestUsername);
         }
+        return jwtService.generateJwtToken(loginRequestUsername);
     }
 }
