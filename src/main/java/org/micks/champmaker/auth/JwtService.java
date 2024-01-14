@@ -4,20 +4,31 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 
 @Service
 public class JwtService {
 
     private static final int ONE_HOUR_IN_MILLIS = 3_600_000;
+    private static final String SECRET = "a7RGqLpiXLeCjqdGPwdFShrXM5QExGgD";
 
     public String generateJwtToken(String username) {
         long now = System.currentTimeMillis();
-        SecretKey key = Jwts.SIG.HS256.key().build();
 
         return Jwts.builder().subject(username)
                 .issuedAt(new Date(now))
                 .expiration(new Date(now + ONE_HOUR_IN_MILLIS))
-                .signWith(key).compact();
+                .signWith(getKey()).compact();
+    }
+
+    public void validateJwtToken(String jwtToken) {
+        SecretKey key = getKey();
+        Jwts.parser().verifyWith(key).build().parseSignedClaims(jwtToken);
+    }
+
+    private SecretKey getKey() {
+        SecretKey key = Jwts.SIG.HS256.key().build();
+        return new SecretKeySpec(SECRET.getBytes(), key.getAlgorithm());
     }
 }

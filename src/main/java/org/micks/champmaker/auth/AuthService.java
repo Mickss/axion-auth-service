@@ -40,4 +40,8 @@ public class AuthService {
         }
         return jwtService.generateJwtToken(loginRequestUsername);
     }
+
+    public void validateToken(ValidateTokenRequest validateTokenRequest) {
+        jwtService.validateJwtToken(validateTokenRequest.getToken());
+    }
 }
