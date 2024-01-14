@@ -25,4 +25,9 @@ public class AuthController {
     public String loginUser(@RequestBody LoginRequest loginRequest) throws UserLoginFailedException {
         return authService.loginUser(loginRequest);
     }
+
+    @PostMapping(value = "/validate", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void validateToken(@RequestBody ValidateTokenRequest validateTokenRequest) {
+        authService.validateToken(validateTokenRequest);
+    }
 }
