@@ -22,8 +22,8 @@ public class AuthService {
 
     public void createUser(CreateUserRequest createUserRequest) {
         log.info("Creating user {}", createUserRequest.getUsername());
-        String encryptedPassword = passwordService.encryptPassword(createUserRequest.getPassword());
-        userPersistApi.storeUser(createUserRequest.getUsername(), encryptedPassword);
+        String hashedPassword = passwordService.hashPassword(createUserRequest.getPassword());
+        userPersistApi.storeUser(createUserRequest.getUsername(), hashedPassword);
     }
 
     public String loginUser(LoginRequest loginRequest) throws UserLoginFailedException {
@@ -34,7 +34,7 @@ public class AuthService {
                 .filter(user -> user.getUsername().equals(loginRequestUsername))
                 .findFirst();
         User user = optionalUser.orElseThrow(() -> new UserLoginFailedException("Incorrect login name " + loginRequestUsername));
-        String encryptPassword = passwordService.encryptPassword(loginRequestPassword);
+        String encryptPassword = passwordService.hashPassword(loginRequestPassword);
         if (!user.getEncryptedPassword().equals(encryptPassword)) {
             throw new UserLoginFailedException("Login failed " + loginRequestUsername);
         }
