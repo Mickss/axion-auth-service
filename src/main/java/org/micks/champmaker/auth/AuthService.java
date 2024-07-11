@@ -2,6 +2,7 @@ package org.micks.champmaker.auth;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class AuthService {
     private PasswordService passwordService;
 
     @Autowired
+    @Qualifier("userDbPersistService")
     private UserPersistApi userPersistApi;
 
     @Autowired
