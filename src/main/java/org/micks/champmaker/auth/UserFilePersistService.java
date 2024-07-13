@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated // User data will be saved in database instead of file
 @Service
 public class UserFilePersistService implements UserPersistApi {
 
