@@ -1,5 +1,6 @@
 package org.micks.champmaker.auth;
 
+@Deprecated
 public class User {
 
     private String username;
