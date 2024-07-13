@@ -7,32 +7,26 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Service
 @Slf4j
 public class UserDbPersistService implements UserPersistApi {
 
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-
     @Autowired
     private DiscGolfDbConnection discGolfDbConnection;
 
     @Override
     public void storeUser(String username, String encryptedPassword) {
-        log.info("Creating new user: {}", username, encryptedPassword);
+        log.info("Creating new user: {}", username);
         try (Connection connection = discGolfDbConnection.connect()) {
-            PreparedStatement statement = connection.prepareStatement("insert into users values(UUID(),?,?,?)");
+            PreparedStatement statement = connection.prepareStatement("insert into users values(UUID(),?,?,NULL)");
             statement.setString(1, username);
             statement.setString(2, encryptedPassword);
-            statement.setString(3, DATE_FORMAT.format(new Date()));
             statement.execute();
             statement.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error while saving user to database", e);
         }
     }
 
