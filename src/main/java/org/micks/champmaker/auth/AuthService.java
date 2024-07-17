@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Service
 @Slf4j
@@ -20,6 +22,9 @@ public class AuthService {
     private UserPersistApi userPersistApi;
 
     @Autowired
+    private DiscGolfDbConnection discGolfDbConnection;
+
+    @Autowired
     private JwtService jwtService;
 
     public void createUser(CreateUserRequest createUserRequest) {
@@ -29,16 +34,19 @@ public class AuthService {
     }
 
     public String loginUser(LoginRequest loginRequest) throws UserLoginFailedException {
-        List<User> users = userPersistApi.getUsers();
         String loginRequestUsername = loginRequest.getUsername();
         String loginRequestPassword = loginRequest.getPassword();
-        Optional<User> optionalUser = users.stream()
-                .filter(user -> user.getUsername().equals(loginRequestUsername))
-                .findFirst();
-        User user = optionalUser.orElseThrow(() -> new UserLoginFailedException("Incorrect login name " + loginRequestUsername));
-        String encryptPassword = passwordService.hashPassword(loginRequestPassword);
-        if (!user.getEncryptedPassword().equals(encryptPassword)) {
-            throw new UserLoginFailedException("Login failed " + loginRequestUsername);
+        try (Connection connection = discGolfDbConnection.connect()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT password_hash FROM users WHERE username = ?");
+            statement.setString(1, loginRequest.getUsername());
+            ResultSet resultSet = statement.executeQuery();
+            String hash = resultSet.getString("password_hash");
+            String encryptPassword = passwordService.hashPassword(loginRequestPassword);
+            if (!hash.equals(encryptPassword)) {
+                throw new UserLoginFailedException("Login failed " + loginRequestUsername);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return jwtService.generateJwtToken(loginRequestUsername);
     }
