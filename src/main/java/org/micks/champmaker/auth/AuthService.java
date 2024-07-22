@@ -1,6 +1,7 @@
 package org.micks.champmaker.auth;
 
 import lombok.extern.slf4j.Slf4j;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -40,10 +41,13 @@ public class AuthService {
             PreparedStatement statement = connection.prepareStatement("SELECT password_hash FROM users WHERE username = ?");
             statement.setString(1, loginRequest.getUsername());
             ResultSet resultSet = statement.executeQuery();
-            String hash = resultSet.getString("password_hash");
-            String encryptPassword = passwordService.hashPassword(loginRequestPassword);
-            if (!hash.equals(encryptPassword)) {
-                throw new UserLoginFailedException("Login failed " + loginRequestUsername);
+            if (resultSet.next()) {
+                String hash = resultSet.getString("password_hash");
+                if (!BCrypt.checkpw(loginRequestPassword, hash)) {
+                    throw new UserLoginFailedException("Incorrect password " + loginRequestUsername);
+                }
+            } else {
+                throw new UserLoginFailedException("Incorrect login " + loginRequestUsername);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

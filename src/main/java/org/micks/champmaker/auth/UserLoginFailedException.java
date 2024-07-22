@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Slf4j
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
+@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 public class UserLoginFailedException extends Exception {
     public UserLoginFailedException(String message) {
         super(message);
