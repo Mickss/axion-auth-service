@@ -5,18 +5,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.4</version>
+        <version>3.3.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
     </properties>
     <groupId>org.micks</groupId>
-    <artifactId>champmaker-auth</artifactId>
+    <artifactId>axion-auth-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>champmaker-auth</name>
+    <name>axion-auth-service</name>
     <description>Authentication service for Champmaker application</description>
     <dependencies>
         <dependency>
