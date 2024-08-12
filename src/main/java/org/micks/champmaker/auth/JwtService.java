@@ -11,7 +11,7 @@ import java.util.Date;
 public class JwtService {
 
     private static final int ONE_HOUR_IN_MILLIS = 3_600_000;
-    private static final String SECRET = "a7RGqLpiXLeCjqdGPwdFShrXM5QExGgD";
+    private static final String SECRET = "a7RGqLpiXLeCjqdGPwdFShrXM5QExGgD"; //TODO Extract secret from some more safer place
 
     public String generateJwtToken(String username) {
         long now = System.currentTimeMillis();
