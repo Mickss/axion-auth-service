@@ -20,7 +20,7 @@ public class UserDbPersistService implements UserPersistApi {
     public void storeUser(String username, String encryptedPassword) {
         log.info("Creating new user: {}", username);
         try (Connection connection = discGolfDbConnection.connect()) {
-            PreparedStatement statement = connection.prepareStatement("insert into users values(UUID(),?,?,NULL)");
+            PreparedStatement statement = connection.prepareStatement("insert into users values(UUID(),?,?,NULL, 'PLAYER')");
             statement.setString(1, username);
             statement.setString(2, encryptedPassword);
             statement.execute();
