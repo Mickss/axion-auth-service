@@ -12,7 +12,8 @@ import java.sql.SQLException;
 @Slf4j
 public class UserService {
 
-    @Autowired DiscGolfDbConnection discGolfDbConnection;
+    @Autowired
+    DiscGolfDbConnection discGolfDbConnection;
 
 
     public void promoteToAdmin(String userId) {
