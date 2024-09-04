@@ -27,4 +27,16 @@ public class UserService {
             throw new RuntimeException("Error while promoting user to ADMIN", e);
         }
     }
+
+    public void downgradeToPlayer(String userId) {
+        log.info("Downgrade user {} to PLAYER", userId);
+        try(Connection connection = discGolfDbConnection.connect()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE users SET role = 'PLAYER' WHERE user_id = ?");
+            statement.setString(1,userId);
+            statement.execute();
+            statement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while downgrading user to PLAYER", e);
+        }
+    }
 }
