@@ -20,7 +20,7 @@ public class UserController {
         //TODO check if logged in user is admin
         userService.promoteToAdmin(userId);
     }
-    @PutMapping(value = "/{userId}/K", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{userId}/downgrade", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void downgradeToPlayer(@PathVariable String userId) {
         //TODO check if logged in user is player
         userService.downgradeToPlayer(userId);
