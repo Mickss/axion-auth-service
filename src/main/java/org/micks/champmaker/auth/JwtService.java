@@ -1,5 +1,6 @@
 package org.micks.champmaker.auth;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,10 @@ public class JwtService {
     private static final int ONE_HOUR_IN_MILLIS = 3_600_000;
     private static final String SECRET = "a7RGqLpiXLeCjqdGPwdFShrXM5QExGgD"; //TODO Extract secret from some more safer place
 
-    public String generateJwtToken(String username) {
+    public String generateJwtToken(String userId) {
         long now = System.currentTimeMillis();
 
-        return Jwts.builder().subject(username)
+        return Jwts.builder().subject(userId)
                 .issuedAt(new Date(now))
                 .expiration(new Date(now + ONE_HOUR_IN_MILLIS))
                 .signWith(getKey()).compact();
@@ -30,5 +31,16 @@ public class JwtService {
     private SecretKey getKey() {
         SecretKey key = Jwts.SIG.HS256.key().build();
         return new SecretKeySpec(SECRET.getBytes(), key.getAlgorithm());
+    }
+
+    public String getSubject(String jwtToken) {
+        validateJwtToken(jwtToken);
+        Claims claims = Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(jwtToken)
+                .getPayload();
+
+        return claims.getSubject();
     }
 }
