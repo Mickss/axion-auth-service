@@ -38,21 +38,22 @@ public class AuthService {
         String loginRequestUsername = loginRequest.getUsername();
         String loginRequestPassword = loginRequest.getPassword();
         try (Connection connection = discGolfDbConnection.connect()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT password_hash FROM users WHERE username = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT user_id, password_hash FROM users WHERE username = ?");
             statement.setString(1, loginRequest.getUsername());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
+                String userId = resultSet.getString("user_id");
                 String hash = resultSet.getString("password_hash");
                 if (!BCrypt.checkpw(loginRequestPassword, hash)) {
                     throw new UserLoginFailedException("Incorrect password " + loginRequestUsername);
                 }
+                return jwtService.generateJwtToken(userId);
             } else {
                 throw new UserLoginFailedException("Incorrect login " + loginRequestUsername);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return jwtService.generateJwtToken(loginRequestUsername);
     }
 
     public void validateToken(ValidateTokenRequest validateTokenRequest) {
