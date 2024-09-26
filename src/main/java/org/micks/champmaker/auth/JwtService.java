@@ -1,6 +1,7 @@
 package org.micks.champmaker.auth;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,9 @@ public class JwtService {
                 .signWith(getKey()).compact();
     }
 
-    public void validateJwtToken(String jwtToken) {
+    public Jws<Claims> validateJwtToken(String jwtToken) {
         SecretKey key = getKey();
-        Jwts.parser().verifyWith(key).build().parseSignedClaims(jwtToken);
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(jwtToken);
     }
 
     private SecretKey getKey() {
@@ -34,13 +35,7 @@ public class JwtService {
     }
 
     public String getSubject(String jwtToken) {
-        validateJwtToken(jwtToken);
-        Claims claims = Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(jwtToken)
-                .getPayload();
-
-        return claims.getSubject();
+        Jws<Claims> claims = validateJwtToken(jwtToken);
+        return claims.getPayload().getSubject();
     }
 }

@@ -54,7 +54,7 @@ public class UserService {
                 UserRole role = UserRole.valueOf(roleString.toUpperCase());
                 return new UserRecord(dbUserId, username, role);
             } else {
-                return null;
+                throw new UserNotFoundException("User with ID " + userId + " not found.");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error while getting user by ID", e);
