@@ -1,5 +1,7 @@
 package org.micks.champmaker.auth;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/public/auth")
-@CrossOrigin
 public class AuthController {
 
     @Autowired
@@ -20,8 +21,19 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String loginUser(@RequestBody LoginRequest loginRequest) throws UserLoginFailedException {
-        return authService.loginUser(loginRequest);
+    public void loginUser(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws UserLoginFailedException {
+        log.info("Received login request for user: {}", loginRequest.getUsername());
+
+        String token = authService.loginUser(loginRequest);
+
+        Cookie jwtCookie = new Cookie("token", token);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(60 * 60 * 24);
+        response.addCookie(jwtCookie);
+
+        log.info("User authenticated: {}", loginRequest.getUsername());
     }
 
     @PostMapping(value = "/validate", consumes = MediaType.APPLICATION_JSON_VALUE)
