@@ -22,20 +22,26 @@ public class UserController {
     JwtService jwtService;
 
     @PutMapping(value = "/{userId}/promote", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void promoteToAdmin(@PathVariable String userId) {
-        //TODO check if logged in user is admin
+    public void promoteToAdmin(@RequestHeader(value = "Authorization") String authorizationHeader, @PathVariable String userId) {
+        String jwtToken = JwtWebUtil.extractTokenFromHeader(authorizationHeader);
+        String loggedInUserId = jwtService.getSubject(jwtToken);
+        if (!userService.isUserAdmin(loggedInUserId)) {
+            throw new UnauthorizedException("Only admins can promote users to ADMIN.");
+        }
+        log.info("User {} promoting user {} to ADMIN", loggedInUserId, userId);
         userService.promoteToAdmin(userId);
     }
 
     @PutMapping(value = "/{userId}/downgrade", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void downgradeToPlayer(@PathVariable String userId) {
-        //TODO check if logged in user is player
+        //TODO check if logged in user is admin
         userService.downgradeToPlayer(userId);
     }
 
     @GetMapping(value = "/logged-in", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserRecord getLoggedInUser(@RequestHeader(value = "Authorization") String authorizationHeader) {
         String jwtToken = JwtWebUtil.extractTokenFromHeader(authorizationHeader);
+        log.info("Extracted JWT Token: {}", jwtToken);
         String userId = jwtService.getSubject(jwtToken);
         return userService.getUser(userId);
     }
