@@ -26,7 +26,7 @@ public class UserController {
         String jwtToken = JwtWebUtil.extractTokenFromHeader(authorizationHeader);
         String loggedInUserId = jwtService.getSubject(jwtToken);
         if (!userService.isUserAdmin(loggedInUserId)) {
-            throw new UnauthorizedException("Only admins can promote users to ADMIN.");
+            throw new UnauthorizedException("Only admins can promote users to ADMIN. Logged in user id: " + loggedInUserId + " User id to promote: " + userId);
         }
         log.info("User {} promoting user {} to ADMIN", loggedInUserId, userId);
         userService.promoteToAdmin(userId);
