@@ -60,4 +60,9 @@ public class UserService {
             throw new RuntimeException("Error while getting user by ID", e);
         }
     }
+
+    public boolean isUserAdmin(String userId) {
+        UserRecord user = getUser(userId);
+        return user.role() == UserRole.ADMIN;
+    }
 }
