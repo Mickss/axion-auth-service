@@ -33,8 +33,13 @@ public class UserController {
     }
 
     @PutMapping(value = "/{userId}/downgrade", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void downgradeToPlayer(@PathVariable String userId) {
-        //TODO check if logged in user is admin
+    public void downgradeToPlayer(@RequestHeader(value = "Authorization") String authorizationHeader, @PathVariable String userId) {
+        String jwtToken = JwtWebUtil.extractTokenFromHeader(authorizationHeader);
+        String loggedInUserId = jwtService.getSubject(jwtToken);
+        if (!userService.isUserAdmin(loggedInUserId)) {
+            throw new UnauthorizedException("Only admins can downgrade users from ADMIN to PLAYER. Logged in user id: " + loggedInUserId + " User id to downgrade: " + userId);
+        }
+        log.info("User {} downgrading user {} to PLAYER", loggedInUserId, userId);
         userService.downgradeToPlayer(userId);
     }
 
