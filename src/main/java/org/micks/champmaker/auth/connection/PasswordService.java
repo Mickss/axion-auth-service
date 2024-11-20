@@ -1,4 +1,4 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.connection;
 
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;

@@ -1,8 +1,12 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.util;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.micks.champmaker.auth.exceptions.UserLoginFailedException;
+import org.micks.champmaker.auth.jwt.ValidateTokenRequest;
+import org.micks.champmaker.auth.user.CreateUserRequest;
+import org.micks.champmaker.auth.user.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

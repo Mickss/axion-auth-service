@@ -1,5 +1,7 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.user;
 
+import org.micks.champmaker.auth.user.User;
+import org.micks.champmaker.auth.user.UserPersistApi;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;

@@ -1,6 +1,14 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.micks.champmaker.auth.connection.DiscGolfDbConnection;
+import org.micks.champmaker.auth.connection.PasswordService;
+import org.micks.champmaker.auth.exceptions.UserLoginFailedException;
+import org.micks.champmaker.auth.jwt.JwtService;
+import org.micks.champmaker.auth.jwt.ValidateTokenRequest;
+import org.micks.champmaker.auth.user.CreateUserRequest;
+import org.micks.champmaker.auth.user.LoginRequest;
+import org.micks.champmaker.auth.user.UserPersistApi;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
