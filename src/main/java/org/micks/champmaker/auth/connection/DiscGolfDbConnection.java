@@ -1,4 +1,4 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.connection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

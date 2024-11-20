@@ -1,4 +1,4 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

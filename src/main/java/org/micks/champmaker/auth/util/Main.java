@@ -1,7 +1,8 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.util;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.micks.champmaker.auth.connection.DatabaseConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

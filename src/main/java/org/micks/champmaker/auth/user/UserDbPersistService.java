@@ -1,6 +1,7 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.micks.champmaker.auth.connection.DiscGolfDbConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

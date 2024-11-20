@@ -1,4 +1,4 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.jwt;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;

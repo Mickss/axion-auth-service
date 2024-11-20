@@ -1,4 +1,4 @@
-package org.micks.champmaker.auth;
+package org.micks.champmaker.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
