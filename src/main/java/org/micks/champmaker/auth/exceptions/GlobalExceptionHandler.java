@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
-
     public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException ex) {
         log.info("Handling exception for: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
@@ -22,5 +21,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleExpiredJwtException(ExpiredJwtException ex) {
         log.info("JWT token has expired: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token has expired. Please log in again.");
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
+        log.warn("User creation failed: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 }
