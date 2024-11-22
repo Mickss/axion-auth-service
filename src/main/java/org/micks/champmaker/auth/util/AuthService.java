@@ -48,9 +48,6 @@ public class AuthService {
                 throw new UserAlreadyExistsException("Username already exist: " + createUserRequest.getUsername());
             }
             String hashedPassword = passwordService.hashPassword(createUserRequest.getPassword());
-            PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO users (username, password_hash) VALUES (?, ?)");
-            insertStatement.setString(1, createUserRequest.getUsername());
-            insertStatement.setString(2, hashedPassword);
             userPersistApi.storeUser(createUserRequest.getUsername(), hashedPassword);
         } catch (SQLException e) {
             throw new RuntimeException("Database error during user creation", e);
