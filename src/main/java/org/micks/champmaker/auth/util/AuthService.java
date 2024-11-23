@@ -3,6 +3,7 @@ package org.micks.champmaker.auth.util;
 import lombok.extern.slf4j.Slf4j;
 import org.micks.champmaker.auth.connection.DiscGolfDbConnection;
 import org.micks.champmaker.auth.connection.PasswordService;
+import org.micks.champmaker.auth.exceptions.UserAlreadyExistsException;
 import org.micks.champmaker.auth.exceptions.UserLoginFailedException;
 import org.micks.champmaker.auth.jwt.JwtService;
 import org.micks.champmaker.auth.jwt.ValidateTokenRequest;
@@ -38,8 +39,19 @@ public class AuthService {
 
     public void createUser(CreateUserRequest createUserRequest) {
         log.info("Creating user {}", createUserRequest.getUsername());
-        String hashedPassword = passwordService.hashPassword(createUserRequest.getPassword());
-        userPersistApi.storeUser(createUserRequest.getUsername(), hashedPassword);
+
+        try (Connection connection = discGolfDbConnection.connect()) {
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?");
+            checkStatement.setString(1, createUserRequest.getUsername());
+            ResultSet resultSet = checkStatement.executeQuery();
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                throw new UserAlreadyExistsException("Username already exist: " + createUserRequest.getUsername());
+            }
+            String hashedPassword = passwordService.hashPassword(createUserRequest.getPassword());
+            userPersistApi.storeUser(createUserRequest.getUsername(), hashedPassword);
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error during user creation", e);
+        }
     }
 
     public String loginUser(LoginRequest loginRequest) throws UserLoginFailedException {

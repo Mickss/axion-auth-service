@@ -1,4 +1,4 @@
-package org.micks.champmaker.auth.util;
+package org.micks.champmaker.auth;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
