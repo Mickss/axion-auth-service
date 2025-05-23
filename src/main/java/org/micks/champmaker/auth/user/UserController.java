@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequestMapping("/users")
@@ -52,5 +54,10 @@ public class UserController {
         log.info("Extracted JWT Token: {}", jwtToken);
         String userId = jwtService.getSubject(jwtToken);
         return userService.getUser(userId);
+    }
+
+    @GetMapping()
+    public List<UserRecord> getUsers() {
+        return userService.getUsers();
     }
 }
