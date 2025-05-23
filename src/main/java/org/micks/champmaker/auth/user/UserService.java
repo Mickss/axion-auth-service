@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -60,6 +62,25 @@ public class UserService {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error while getting user by ID", e);
+        }
+    }
+
+    public  List<UserRecord> getUsers() {
+        try (Connection connection = discGolfDbConnection.connect()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
+            ResultSet resultSet = statement.executeQuery();
+            List<UserRecord> userRecordList = new ArrayList<>();
+            while (resultSet.next()) {
+                UserRecord userRecord = new UserRecord(
+                        resultSet.getString("user_id"),
+                        resultSet.getString("username"),
+                        UserRole.valueOf(resultSet.getString("role"))
+                );
+                userRecordList.add(userRecord);
+            }
+            return userRecordList;
+        } catch (SQLException e) {
+            throw new IllegalStateException("Error while getting users from database", e);
         }
     }
 
