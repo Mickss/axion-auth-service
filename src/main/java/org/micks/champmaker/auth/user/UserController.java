@@ -31,6 +31,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only ADMINS can promote users");
         }
         userService.promoteToAdmin(userId);
+        log.info("Success, promotion user {}", userId);
     }
 
     @PutMapping(value = "/{userId}/downgrade", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -39,6 +40,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only ADMINS can downgrade users");
         }
         userService.downgradeToPlayer(userId);
+        log.info("Success, downgrade user {}", userId);
     }
 
     @GetMapping(value = "/logged-in", produces = MediaType.APPLICATION_JSON_VALUE)
