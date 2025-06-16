@@ -30,7 +30,6 @@ public class UserController {
         if (!"ADMIN".equals(userRole)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only ADMINS can promote users");
         }
-        log.info("Promoting user {} to ADMIN", userId);
         userService.promoteToAdmin(userId);
     }
 
@@ -39,7 +38,6 @@ public class UserController {
         if (!"ADMIN".equals(userRole)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only ADMINS can downgrade users");
         }
-        log.info("Downgrading user {} to PLAYER", userId);
         userService.downgradeToPlayer(userId);
     }
 
