@@ -2,14 +2,14 @@ package org.micks.champmaker.auth.user;
 
 public class CreateUserRequest {
 
-    private String email;
+    private String username;
     private String password;
 
     public CreateUserRequest() {
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {
