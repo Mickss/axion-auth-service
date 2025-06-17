@@ -48,12 +48,12 @@ public class UserService {
     public UserRecord getUser(String userId) {
         log.info("Getting user by Id: {}", userId);
         try (Connection connection = discGolfDbConnection.connect()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT user_id, email, role FROM users WHERE user_id = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT user_id, username, role FROM users WHERE user_id = ?");
             statement.setString(1, userId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 String dbUserId = resultSet.getString("user_id");
-                String username = resultSet.getString("email");
+                String username = resultSet.getString("username");
                 String roleString = resultSet.getString("role");
                 UserRole role = UserRole.valueOf(roleString.toUpperCase());
                 return new UserRecord(dbUserId, username, role);
@@ -73,7 +73,7 @@ public class UserService {
             while (resultSet.next()) {
                 UserRecord userRecord = new UserRecord(
                         resultSet.getString("user_id"),
-                        resultSet.getString("email"),
+                        resultSet.getString("username"),
                         UserRole.valueOf(resultSet.getString("role"))
                 );
                 userRecordList.add(userRecord);
