@@ -38,38 +38,38 @@ public class AuthService {
     private JwtService jwtService;
 
     public void createUser(CreateUserRequest createUserRequest) {
-        log.info("Creating user {}", createUserRequest.getUsername());
+        log.info("Creating user {}", createUserRequest.getEmail());
 
         try (Connection connection = discGolfDbConnection.connect()) {
-            PreparedStatement checkStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?");
-            checkStatement.setString(1, createUserRequest.getUsername());
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT COUNT(*) FROM users WHERE email = ?");
+            checkStatement.setString(1, createUserRequest.getEmail());
             ResultSet resultSet = checkStatement.executeQuery();
             if (resultSet.next() && resultSet.getInt(1) > 0) {
-                throw new UserAlreadyExistsException("Username already exist: " + createUserRequest.getUsername());
+                throw new UserAlreadyExistsException("Username already exist: " + createUserRequest.getEmail());
             }
             String hashedPassword = passwordService.hashPassword(createUserRequest.getPassword());
-            userPersistApi.storeUser(createUserRequest.getUsername(), hashedPassword);
+            userPersistApi.storeUser(createUserRequest.getEmail(), hashedPassword);
         } catch (SQLException e) {
             throw new RuntimeException("Database error during user creation", e);
         }
     }
 
     public String loginUser(LoginRequest loginRequest) throws UserLoginFailedException {
-        String loginRequestUsername = loginRequest.getUsername();
+        String loginRequestEmail = loginRequest.getEmail();
         String loginRequestPassword = loginRequest.getPassword();
         try (Connection connection = discGolfDbConnection.connect()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT user_id, password_hash FROM users WHERE username = ?");
-            statement.setString(1, loginRequest.getUsername());
+            PreparedStatement statement = connection.prepareStatement("SELECT user_id, password_hash FROM users WHERE email = ?");
+            statement.setString(1, loginRequest.getEmail());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 String userId = resultSet.getString("user_id");
                 String hash = resultSet.getString("password_hash");
                 if (!BCrypt.checkpw(loginRequestPassword, hash)) {
-                    throw new UserLoginFailedException("Incorrect password " + loginRequestUsername);
+                    throw new UserLoginFailedException("Incorrect password " + loginRequestEmail);
                 }
                 return jwtService.generateJwtToken(userId);
             } else {
-                throw new UserLoginFailedException("Incorrect login " + loginRequestUsername);
+                throw new UserLoginFailedException("Incorrect login " + loginRequestEmail);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

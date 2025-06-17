@@ -29,7 +29,7 @@ public class AuthController {
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void loginUser(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws UserLoginFailedException {
-        log.info("Received login request for user: {}", loginRequest.getUsername());
+        log.info("Received login request for user: {}", loginRequest.getEmail());
 
         String token = authService.loginUser(loginRequest);
 
@@ -40,7 +40,7 @@ public class AuthController {
         jwtCookie.setMaxAge(60 * 60 * 24);
         response.addCookie(jwtCookie);
 
-        log.info("User authenticated: {}", loginRequest.getUsername());
+        log.info("User authenticated: {}", loginRequest.getEmail());
     }
 
     @PostMapping(value = "/logout")
