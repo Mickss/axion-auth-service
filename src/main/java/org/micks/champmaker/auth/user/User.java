@@ -3,16 +3,16 @@ package org.micks.champmaker.auth.user;
 @Deprecated
 public class User {
 
-    private String username;
+    private String email;
     private String encryptedPassword;
 
-    public User(String username, String encryptedPassword) {
-        this.username = username;
+    public User(String email, String encryptedPassword) {
+        this.email = email;
         this.encryptedPassword = encryptedPassword;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
     public String getEncryptedPassword() {
