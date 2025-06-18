@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface UserPersistApi {
 
-    void storeUser(String username, String encryptedPassword);
+    void storeUser(String email, String encryptedPassword);
     List<User> getUsers();
 }
