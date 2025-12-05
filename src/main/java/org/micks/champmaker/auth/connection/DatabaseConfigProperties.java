@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 public class DatabaseConfigProperties {
 
+    private String host;
     private String name;
     private String user;
     private String password;
